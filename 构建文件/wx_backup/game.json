@@ -1,0 +1,39 @@
+{
+    "deviceOrientation": "portrait",
+    "openDataContext": "openDataContext",
+    "networkTimeout": {
+        "request": 5000,
+        "connectSocket": 5000,
+        "uploadFile": 5000,
+        "downloadFile": 500000
+    },
+    "plugins": {
+        "cocos": {
+            "version": "3.8.8",
+            "provider": "wx0446ba2621dda60a"
+        },
+        "MiniGameCommon": {
+            "version": "latest",
+            "provider": "wxaed5ace05d92b218",
+            "contexts": [
+                {
+                    "type": "isolatedContext"
+                }
+            ]
+        }
+    },
+    "subPackages": [
+        {
+            "name": "start",
+            "root": "assets/start-scene"
+        },
+        {
+            "name": "res",
+            "root": "assets/res"
+        },
+        {
+            "name": "startAsset",
+            "root": "assets/startAsset"
+        }
+    ]
+}
