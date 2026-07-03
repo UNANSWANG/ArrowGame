@@ -64,6 +64,7 @@ export class UIFail extends UIBase {
         ccTools.showChildByIdx(this.titleNode, this.failType);
         ccTools.showChildByIdx(this.logoNode, this.failType);
 
+        this.SDKAdReport();
         pData.SDKReportLevelFail();
     }
 
@@ -73,9 +74,14 @@ export class UIFail extends UIBase {
         this.resurrectionBtn.addComponent(zoomButton).onClick = this.clickResurrectionBtn.bind(this);
     }
 
+    /**广告点上报 */
+    SDKAdReport() {
+        videoMgr.SDKAdShow(1);
+    }
+
     /**点击复活 */
     clickResurrectionBtn() {
-        videoMgr.watchVideo(()=>{
+        videoMgr.watchVideo(1, () => {
             this.onClose();
             gm.Event.emit(GameEvent.resurrectionGame, this.failType);
         })

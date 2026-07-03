@@ -44,14 +44,15 @@ export class UIProps extends UIBase {
             this.pageIdx = 0;
         }
 
-        if(data && data.call != null){
+        if (data && data.call != null) {
             this.closeCall = data.call;
-        }else{
+        } else {
             this.closeCall = null;
         }
 
         this.powerNumLab.string = pData.getPropsNum(PropsName.power).toString();
         this.refreshPage();
+        this.SDKAdReport();
     }
 
     bindBtn() {
@@ -61,16 +62,22 @@ export class UIProps extends UIBase {
             let pageNode = this.pageList[i];
             let getBtn = pageNode.getChildByName("getBtn");
             let btnComp = getBtn.addComponent(zoomButton);
-            if(i == 0){
+            if (i == 0) {
                 btnComp.onClick = this.clickPowerGetBtn.bind(this);
             }
             else if (i == 1) {
                 btnComp.onClick = this.clickTpsGetBtn.bind(this);
-            } 
+            }
             else {
                 btnComp.onClick = this.clickAuxGetBtn.bind(this);
             }
         }
+    }
+
+    /**广告点上报 */
+    SDKAdReport() {
+        videoMgr.SDKAdShow(2);
+        videoMgr.SDKAdShow(27);
     }
 
     /**切换页面 */
@@ -90,7 +97,7 @@ export class UIProps extends UIBase {
     /**点击体力的领取按钮 */
     clickPowerGetBtn() {
         //领取2点体力
-        videoMgr.watchVideo(() => {
+        videoMgr.watchVideo(2, () => {
             this.onClose();
             pData.changePower(2);
             this.closeCall && this.closeCall();
@@ -99,7 +106,7 @@ export class UIProps extends UIBase {
 
     /**点击提示的领取按钮 */
     clickTpsGetBtn() {
-        videoMgr.watchVideo(() => {
+        videoMgr.watchVideo(27, () => {
             this.onClose();
             gm.Event.emit(GameEvent.useTipsProps);
         });
