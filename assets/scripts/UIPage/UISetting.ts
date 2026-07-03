@@ -143,6 +143,7 @@ export class UISetting extends UIBase {
     /**点击主页 */
     clickHomeBtn() {
         this.onClose();
+        pData.SDKReportLevelExit();
         //上报失败
         pData.reportLevel(false);
         uiMgr.closeGame();

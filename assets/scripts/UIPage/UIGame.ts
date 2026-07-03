@@ -252,7 +252,7 @@ export class UIGame extends UIBase {
         this.skipBtn.addComponent(zoomButton).onClick = this.clickSkipBtn.bind(this);
         this.testBtn.addComponent(zoomButton).onClick = this.clickTestBtn.bind(this);
         this.switchBtn.on(Node.EventType.TOUCH_END, this.clickSwitchBtn.bind(this), this);
-        this.guidePageList[2].getChildByName("closeBtn").addComponent(zoomButton).onClick = this.closeAllGuide.bind(this);
+        this.guidePageList[2].getChildByName("closeBtn").addComponent(zoomButton).onClick = this.clickGuide3.bind(this);
 
         (this.scroll as any)._onMouseWheel = this.onMouseWheel.bind(this);
         this.scroll.node.on(Input.EventType.MOUSE_WHEEL, this.onMouseWheel, this);
@@ -527,19 +527,29 @@ export class UIGame extends UIBase {
 
     /**检测引导 */
     checkGuide() {
+        let isGuide = false;
         if (pData.level == 0) {
+            isGuide = true;
             this.guideDialogueComp.showDialogue("点击箭头移动");
             this.guidePageList[0].active = true;
             this.guidePageList[0].getChildByName("finger").getComponent(Animation).play();
             this.guidePageList[0].getChildByName("finger").position = new Vec3(110, 50, 0);
         }
         else if (pData.level == 1) {
+            isGuide = true;
             this.guideDialogueComp.showDialogue("双指外拨进行缩放");
             this.guidePageList[1].active = true;
             this.guidePageList[1].getChildByName("finger").getComponent(Animation).play();
         }
         else if (pData.level == 2) {
+            isGuide = true;
             this.guidePageList[2].active = true;
+        }
+
+        if (isGuide) {
+            if (gm.hgSdk) {
+                gm.hgSdk.track('TUTORIAL_START', {});
+            }
         }
     }
 
@@ -623,10 +633,10 @@ export class UIGame extends UIBase {
 
         for (let i = 0; i < arrowData.length; i++) {
             let arrowDrawItem = this.drawList.children[i];
-            if(!arrowDrawItem){
+            if (!arrowDrawItem) {
                 //创建画笔
                 arrowDrawItem = poolMgr.drawNodePool.get();
-    
+
                 if (!arrowDrawItem) {
                     arrowDrawItem = instantiate(this.drawItemPrefab);
                 }
@@ -635,15 +645,15 @@ export class UIGame extends UIBase {
             }
 
             let drawLineItem = this.lineList.children[i];
-            if(!drawLineItem){
+            if (!drawLineItem) {
                 //创建辅助线画笔
                 drawLineItem = poolMgr.drawLineNodePool.get();
                 if (!drawLineItem) {
                     drawLineItem = instantiate(this.drawLineItemPrefab);
                 }
-    
+
                 drawLineItem.active = true;
-    
+
                 this.lineList.addChild(drawLineItem);
             }
 
@@ -2025,6 +2035,9 @@ export class UIGame extends UIBase {
             this.guidePageList[0].getChildByName("finger").getComponent(Animation).stop();
             this.guidePageList[0].active = false;
             this.guideDialogueComp.closeDialogue();
+            if (gm.hgSdk) {
+                gm.hgSdk.track('TUTORIAL_FINISH',{});
+            }
         }
         this.firstGuideNum++;
     }
@@ -2034,6 +2047,17 @@ export class UIGame extends UIBase {
         this.guidePageList[1].getChildByName("finger").getComponent(Animation).stop();
         this.guidePageList[1].active = false;
         this.guideDialogueComp.closeDialogue();
+        if (gm.hgSdk) {
+            gm.hgSdk.track('TUTORIAL_FINISH',{});
+        }
+    }
+
+    /**点击引导3 */
+    clickGuide3() {
+        if (gm.hgSdk) {
+            gm.hgSdk.track('TUTORIAL_FINISH',{});
+        }
+        this.closeAllGuide();
     }
 
     /**点击主题切换按钮 */

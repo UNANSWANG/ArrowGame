@@ -63,6 +63,8 @@ export class UIFail extends UIBase {
         this.addLab.string = this.failType == FailType.TimeOut ? "+120" : "+1";
         ccTools.showChildByIdx(this.titleNode, this.failType);
         ccTools.showChildByIdx(this.logoNode, this.failType);
+
+        pData.SDKReportLevelFail();
     }
 
     bindBtn() {

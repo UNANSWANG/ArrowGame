@@ -57,6 +57,8 @@ export class playerData {
     comboNum = 0;
     /**当前阶段 */
     currentStage = -1;
+    /**当前关卡所看广告数 */
+    adNum = 0;
 
     levelInit() {
         let data = levelConfig.tableData[this.realyLevel];
@@ -71,6 +73,7 @@ export class playerData {
         pData.isShowAd = false;
         pData.isScale = false;
         pData.isUseLine = false;
+        pData.adNum = 0;
 
         this.colorArrowNum = data.colorNum || 0;
         this.isSprint = data.isSprint == 1;
@@ -82,13 +85,46 @@ export class playerData {
         this.maxArrowNum = this.levelData.arrowData.length + this.levelData.bigArrowData.length;
         this.curArrowNum = 0;
 
-        this.SDKReportLevel();
+        this.SDKReportLevelStart();
     }
 
-    /**SDK关卡上报 */
-    SDKReportLevel() {
+    /**SDK关卡开始上报 */
+    SDKReportLevelStart() {
         if (gm.hgSdk) {
             gm.hgSdk.track('LEVEL_ENTER', {
+                enter_level_id: 0,	    //进入的关卡进度（ 0 ~ 1 之间的数值），需保留两位小数
+                level_id: (pData.level + 1),    	//关卡ID，数值
+            });
+        }
+    }
+
+    /**SDK关卡中途退出上报 */
+    SDKReportLevelExit() {
+        if (gm.hgSdk) {
+            gm.hgSdk.track('LEVEL_EXIT', {
+                ad_cnt: pData.adNum,
+                enter_level_id: 0,	    //进入的关卡进度（ 0 ~ 1 之间的数值），需保留两位小数
+                level_id: (pData.level + 1),    	//关卡ID，数值
+            });
+        }
+    }
+
+    /**SDK关卡失败上报 */
+    SDKReportLevelFail() {
+        if (gm.hgSdk) {
+            gm.hgSdk.track('LEVEL_LOSE', {
+                ad_cnt: pData.adNum,
+                enter_level_id: 0,	    //进入的关卡进度（ 0 ~ 1 之间的数值），需保留两位小数
+                level_id: (pData.level + 1),    	//关卡ID，数值
+            });
+        }
+    }
+
+    /**SDK关卡完成上报 */
+    SDKReportLevelComplete() {
+        if (gm.hgSdk) {
+            gm.hgSdk.track('LEVEL_PASS', {
+                ad_cnt: pData.adNum,
                 enter_level_id: 0,	    //进入的关卡进度（ 0 ~ 1 之间的数值），需保留两位小数
                 level_id: (pData.level + 1),    	//关卡ID，数值
             });
@@ -231,7 +267,7 @@ export class playerData {
     /**修改连击次数 */
     fixComboNum(num = 1) {
         this.comboNum += num;
-        if(this.comboNum < 0){
+        if (this.comboNum < 0) {
             this.comboNum = 0;
         }
 
@@ -241,14 +277,14 @@ export class playerData {
         this.currentStage = -1;
 
         //更新当前阶段
-        for(let j = configData.stageArr.length - 1; j >= 0; j--){
-            if(this.comboNum >= configData.stageArr[j]){
+        for (let j = configData.stageArr.length - 1; j >= 0; j--) {
+            if (this.comboNum >= configData.stageArr[j]) {
                 this.currentStage = j;
                 break;
             }
         }
 
-        if(this.currentStage != lastStage){
+        if (this.currentStage != lastStage) {
             gm.Event.emit(GameEvent.refreshSprintStage);
         }
     }

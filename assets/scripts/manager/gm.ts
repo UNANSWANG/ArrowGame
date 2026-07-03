@@ -23,7 +23,7 @@ export class gm extends Component {
     static hgSdk: any = null;
     static platType: PlatType = PlatType.h5;
     /**是否是调试模式 */
-    static isDebug: boolean = true;
+    static isDebug: boolean = false;
     /**是否已经登录 */
     static isLogin: boolean = false;
 

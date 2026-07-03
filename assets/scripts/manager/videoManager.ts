@@ -12,6 +12,7 @@ export class videoManager {
     watchVideo(complete?: (...arg: any[]) => void, noComplete?: (...arg: any[]) => void): void {
         let adCall = ()=>{
             pData.isShowAd = true;
+            pData.adNum++;
             complete && complete();
         }
 

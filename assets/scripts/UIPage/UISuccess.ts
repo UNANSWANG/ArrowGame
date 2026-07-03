@@ -35,6 +35,7 @@ export class UISuccess extends UIBase {
     }
 
     initData() {
+        pData.SDKReportLevelComplete();
         pData.addLevel();
         //胜利给一个体力
         pData.changePower(1);
