@@ -11,7 +11,7 @@ export class userManager {
     /**抖音插屏广告id */
     Ad_interstitialAd_tt: string = "";
     /**抖音激励视频广告id */
-    Ad_video_tt: string = "";
+    Ad_video_tt: string = "5iiorf2se413v8rll8";
 
     /**用户昵称 */
     nickName: string = "";
@@ -24,8 +24,8 @@ export class userManager {
 
     /**接口公告参数 */
     params = {
-        /**后台游戏id*/
-        game_id: 2,
+        /**后台游戏id 微信：2 抖音：3*/
+        game_id: 3,
         /**后台账号ID*/
         uid: 0,
         /**用户openId */

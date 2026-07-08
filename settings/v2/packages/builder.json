@@ -25,13 +25,14 @@
               "isRemote": false,
               "compressionType": "merge_dep"
             },
-            "configMode": "fallback",
+            "configMode": "overwrite",
             "overwriteSettings": {
               "wechatgame": {
                 "isRemote": false
               },
               "bytedance-mini-game": {
-                "isRemote": false
+                "isRemote": false,
+                "compressionType": "subpackage"
               }
             }
           }

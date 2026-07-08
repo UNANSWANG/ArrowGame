@@ -22,6 +22,8 @@ export class UILoading extends Component {
     tableComplete = false;
     /**界面加载完成 */
     uiComplete = false;
+    /**sdk登录完成 */
+    sdkLoginComplete = false;
 
     /**总进度 */
     totalProgressMap = {};
@@ -47,6 +49,7 @@ export class UILoading extends Component {
     async initData() {
         gm.Event.on(GameEvent.tableLoadComplete, this.tableLoadComplete, this);
         this.initStorageData();
+        this.initSDK();
 
         await this.preLoadBundle();
 
@@ -145,8 +148,31 @@ export class UILoading extends Component {
 
     /**加载完成判断 */
     checkLoadComplete() {
-        if (this.tableComplete && this.uiComplete && gm.isLogin) {
+        if (this.tableComplete && this.uiComplete && gm.isLogin && this.sdkLoginComplete) {
             director.loadScene("main");
+        }
+    }
+
+    initSDK() {
+        this.sdkLoginComplete = false;
+        if (gm.API.PLAT && gm.API.PLAT.HgSdk) {
+            console.warn("初始化HgSdk");
+            gm.hgSdk = new gm.API.PLAT.HgSdk();
+            gm.hgSdk.init((res) => {
+                const gameId = res.game_id
+                const status = res.status
+                this.sdkLoginComplete = true;
+
+                if (status === 0) {
+                    // 调用登录
+                    gm.hgSdk.login((res) => {
+                        // console.warn("登录成功，uid:", res.uid, "token:", res.token);
+                    })
+                }
+            })
+        } else {
+            this.sdkLoginComplete = true;
+            console.warn("没有HgSdk对象");
         }
     }
 
@@ -157,7 +183,7 @@ export class UILoading extends Component {
         pData.level = ccStorageTools.getNumberData(SaveKey.level) || 0;
 
         //TODO 测试用，后续注释掉
-        if(gm.platType == PlatType.h5){
+        if (gm.platType == PlatType.h5) {
             // pData.level = 3;
         }
 
