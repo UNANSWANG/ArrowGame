@@ -8,6 +8,7 @@ import { achiveConfig, JsonAchiveData } from '../json/jsonAchive';
 import { uiMgr } from './UIManager';
 import { httpMgr } from '../sdk/network/httpManager';
 import { netConfig, urlConfig } from '../sdk/network/netConfig';
+import { TTManager } from '../sdk/plat/tt/TTManager';
 const { ccclass, property } = _decorator;
 
 //用户游戏内数据
@@ -150,6 +151,9 @@ export class playerData {
         //TODO 测试
         // console.warn("上报关卡给后端", levelReprotData);
         httpMgr.post(urlConfig.levelReport, levelReprotData);
+        if(gm.platType === PlatType.tt && isPass){
+            (gm.API as TTManager).setRankData(this.level + 1);
+        }
     }
 
     /**当前关卡进度 */

@@ -2070,8 +2070,9 @@ export class UIGame extends UIBase {
 
     /**点击下一关（用以测试） */
     clickNextBtn() {
-        pData.addLevel();
-        this.initData();
+        // pData.addLevel();
+        // this.initData();
+        uiMgr.openPage(UIPath.UISuccess);
     }
 
     /**点击增加缩放按钮 */
